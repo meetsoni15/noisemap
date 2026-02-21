@@ -1,0 +1,16 @@
+# Binaries
+noisemap
+*.exe
+*.out
+
+# Go
+vendor/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
