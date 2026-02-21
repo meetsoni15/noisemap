@@ -15,6 +15,10 @@ Visualize which files in your project are the riskiest — directly from the com
 
 [![Go Version](https://img.shields.io/badge/Go-1.24+-00ADD8?style=flat&logo=go)](https://go.dev)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Go CI](https://github.com/meetsoni15/noisemap/actions/workflows/ci.yml/badge.svg)](https://github.com/meetsoni15/noisemap/actions/workflows/ci.yml)
+[![Go Release](https://github.com/meetsoni15/noisemap/actions/workflows/release.yml/badge.svg)](https://github.com/meetsoni15/noisemap/actions/workflows/release.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/meetsoni15/noisemap)](https://goreportcard.com/report/github.com/meetsoni15/noisemap)
+[![Downloads](https://img.shields.io/github/downloads/meetsoni15/noisemap/total?color=blue)](https://github.com/meetsoni15/noisemap/releases)
 [![Built with Bubble Tea](https://img.shields.io/badge/built%20with-Bubble%20Tea-ff69b4)](https://github.com/charmbracelet/bubbletea)
 
 ![demo](demo.gif)
