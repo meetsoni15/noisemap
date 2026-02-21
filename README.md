@@ -1,32 +1,52 @@
-# noisemap 🗺️
+<div align="center">
 
-> **Codebase complexity heatmap for your terminal.**  
-> Visualize which files in your project are the most dangerous — combining cyclomatic complexity and git churn into a beautiful, interactive risk heatmap.
-
----
-
-## What is it?
-
-`noisemap` scans any codebase and assigns every source file a **risk score** based on:
-
-- **Cyclomatic Complexity** — how many branches/paths exist (via Go AST or line heuristics)
-- **Git Churn** — how many times the file has been changed in git history
-- **Composite Risk Score** — weighted combination → color-coded `🟢 Low → 🟡 Medium → 🟠 High → 🔴 Critical`
-
-Built with [Bubble Tea](https://github.com/charmbracelet/bubbletea) + [Lipgloss](https://github.com/charmbracelet/lipgloss).
-
----
-
-## Install
-
-```bash
-go install github.com/meet/noisemap@latest
+```
+ ███╗   ██╗ ██████╗ ██╗███████╗███████╗███╗   ███╗ █████╗ ██████╗
+ ████╗  ██║██╔═══██╗██║██╔════╝██╔════╝████╗ ████║██╔══██╗██╔══██╗
+ ██╔██╗ ██║██║   ██║██║███████╗█████╗  ██╔████╔██║███████║██████╔╝
+ ██║╚██╗██║██║   ██║██║╚════██║██╔══╝  ██║╚██╔╝██║██╔══██║██╔═══╝
+ ██║ ╚████║╚██████╔╝██║███████║███████╗██║ ╚═╝ ██║██║  ██║██║
+ ╚═╝  ╚═══╝ ╚═════╝ ╚═╝╚══════╝╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝
 ```
 
-Or build from source:
+**Codebase complexity heatmap for your terminal.**
 
+Visualize which files in your project are the riskiest — directly from the command line.
+
+[![Go Version](https://img.shields.io/badge/Go-1.24+-00ADD8?style=flat&logo=go)](https://go.dev)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Built with Bubble Tea](https://img.shields.io/badge/built%20with-Bubble%20Tea-ff69b4)](https://github.com/charmbracelet/bubbletea)
+
+![demo](demo.gif)
+
+</div>
+
+---
+
+## What is noisemap?
+
+`noisemap` scans any codebase and assigns every source file a **risk score** by combining two signals:
+
+- 🧠 **Cyclomatic Complexity** — how many decision branches exist in each file
+- 🔄 **Git Churn** — how many times each file has been changed in version history
+
+The result is a color-coded heatmap: **`🟢 Low → 🟡 Medium → 🟠 High → 🔴 Critical`**
+
+High-churn + high-complexity files are your most dangerous files — the ones most likely to contain bugs and technical debt. `noisemap` makes them instantly visible.
+
+---
+
+## Installation
+
+### Using `go install`
 ```bash
-git clone https://github.com/meet/noisemap
+go install github.com/meetsoni15/noisemap@latest
+```
+> Requires Go 1.24+. Make sure `$GOPATH/bin` is in your `$PATH`.
+
+### Build from Source
+```bash
+git clone https://github.com/meetsoni15/noisemap
 cd noisemap
 go build -o noisemap .
 ```
@@ -36,20 +56,78 @@ go build -o noisemap .
 ## Usage
 
 ```bash
-# Scan current directory
+# Scan the current directory
 noisemap
 
 # Scan a specific project
 noisemap ./path/to/your/project
 
-# Show help & keybindings
+# Show help & all keybindings
 noisemap --help
+
+# Show version
+noisemap --version
 ```
 
 ---
 
-## Keybindings
+## Features
 
+### 🗺 Heatmap View
+- Every source file is rendered as a colored `██` block
+- Color intensity reflects the composite risk score
+- Navigate with `j/k`, selected file details shown below the grid
+- Toggle between list and heatmap views with `v`
+
+### 📁 File List View
+- Sortable list with `██` risk color badges beside each file
+- Directory path shown in dim, filename in full
+- Score displayed inline
+- Scrollable with viewport tracking
+
+### 🔍 File Detail Pane
+- Full stats for the selected file: language, risk score, complexity, churn
+- **12-month sparkline** of git activity — see if churn is increasing or stable
+- **Top 5 most complex functions** (Go files only, via AST analysis)
+- Risk band label: `🟢 Low` / `🟡 Medium` / `🟠 High` / `🔴 Critical`
+
+### 🧠 Complexity Analysis
+| Language | Method |
+|---|---|
+| **Go** | Full AST analysis — counts `if`, `for`, `range`, `select`, `case`, `&&`, `||` nodes |
+| JS / TS / Python / Java / Rust / C / C++ / Ruby / PHP | Line-based keyword heuristics |
+
+### 🔄 Git Churn Analysis
+- Runs `git log --follow --oneline` per file
+- Counts total commits touching each file
+- Builds 12-month monthly buckets for the sparkline chart
+- Gracefully handles non-git directories (churn = 0)
+
+### 📊 Risk Scoring
+```
+Risk Score = 0.6 × complexity_normalized + 0.4 × churn_normalized
+```
+
+| Score | Band | Color |
+|---|---|---|
+| 0 – 30 | Low | 🟢 Green |
+| 30 – 60 | Medium | 🟡 Yellow |
+| 60 – 80 | High | 🟠 Orange |
+| 80 – 100 | Critical | 🔴 Red |
+
+---
+
+## Keyboard Shortcuts
+
+### Global
+| Key | Action |
+|---|---|
+| `q` / `Ctrl+C` | Quit |
+| `v` | Toggle list / heatmap view |
+| `s` | Cycle sort: Risk → Complexity → Churn → Name |
+| `r` | Re-scan the directory |
+
+### Navigation
 | Key | Action |
 |---|---|
 | `j` / `↓` | Move down |
@@ -57,51 +135,42 @@ noisemap --help
 | `g` | Jump to top |
 | `G` | Jump to bottom |
 | `Tab` | Switch pane (list ↔ detail) |
-| `v` | Toggle heatmap / list view |
-| `s` | Cycle sort: risk → complexity → churn → name |
-| `r` | Re-scan directory |
-| `q` / `Ctrl+C` | Quit |
 
 ---
 
-## Views
+## Terminal Compatibility
 
-### 📁 List View (default)
-- **Left pane**: All files sorted by risk score, color-coded with `██` badges
-- **Right pane**: Detail for selected file — stats, 12-month churn sparkline, top functions by complexity (Go)
+`noisemap` works in any modern terminal emulator. For the best experience with full color rendering, use one of:
 
-### 🗺 Heatmap View (`v`)
-- Every file rendered as a colored `██` block
-- Selected file highlighted with stats shown below
+- [Ghostty](https://ghostty.org)
+- [Kitty](https://sw.kovidgoyal.net/kitty/)
+- [WezTerm](https://wezfurlong.org/wezterm/)
+- [iTerm2](https://iterm2.com)
+- [Alacritty](https://alacritty.org)
 
 ---
 
-## Supported Languages
+## Built With
 
-| Language | Complexity Method |
+| Library | Purpose |
 |---|---|
-| Go | AST-based (precise McCabe formula) |
-| JavaScript / TypeScript | Line keyword heuristics |
-| Python | Line keyword heuristics |
-| Java, Rust, C, C++, Ruby, PHP | Line keyword heuristics |
+| [Bubble Tea](https://github.com/charmbracelet/bubbletea) | TUI framework (Elm architecture) |
+| [Lipgloss](https://github.com/charmbracelet/lipgloss) | Styling, borders, color palette |
+| [Bubbles](https://github.com/charmbracelet/bubbles) | UI components |
 
 ---
 
-## Risk Score
+## Contributing
 
-```
-Risk = 0.6 × complexity_normalized + 0.4 × churn_normalized
-```
+Contributions are welcome! Feel free to open an issue or submit a pull request.
 
-| Score | Band | Color |
-|---|---|---|
-| 0–30 | Low | 🟢 Green |
-| 30–60 | Medium | 🟡 Yellow |
-| 60–80 | High | 🟠 Orange |
-| 80–100 | Critical | 🔴 Red |
+1. Fork the repo
+2. Create a branch: `git checkout -b feat/my-feature`
+3. Commit your changes: `git commit -m "feat: add my feature"`
+4. Push and open a PR
 
 ---
 
 ## License
 
-MIT
+MIT — see [LICENSE](LICENSE) for details.
