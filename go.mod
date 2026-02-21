@@ -1,4 +1,4 @@
-module github.com/meet/noisemap
+module github.com/meetsoni15/noisemap
 
 go 1.24.2
 

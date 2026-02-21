@@ -5,7 +5,7 @@ import (
 	"os"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/meet/noisemap/internal/ui"
+	"github.com/meetsoni15/noisemap/internal/ui"
 )
 
 const version = "0.1.0"

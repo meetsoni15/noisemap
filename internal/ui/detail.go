@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
-	"github.com/meet/noisemap/internal/analyze"
+	"github.com/meetsoni15/noisemap/internal/analyze"
 )
 
 // renderDetail renders the detail pane for the selected file.

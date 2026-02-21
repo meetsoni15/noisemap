@@ -8,7 +8,7 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/meet/noisemap/internal/analyze"
+	"github.com/meetsoni15/noisemap/internal/analyze"
 )
 
 // ViewMode controls which view is active.
